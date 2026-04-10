@@ -30,6 +30,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        getWindow().setStatusBarColor(android.graphics.Color.BLACK);
+
         cardStartBrowse = findViewById(R.id.card_start_browse);
         cardFavorites = findViewById(R.id.card_favorites);
         tvFavoriteCount = findViewById(R.id.tv_favorite_count);
