@@ -187,7 +187,7 @@ public class FavoriteActivity extends AppCompatActivity {
         HomeActivity.saveFavorites(this, savedFavorites);
 
         if (favoriteList.isEmpty()) {
-            Toast.makeText(this, "已取消收藏，收藏夹为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unfavorited_empty), Toast.LENGTH_SHORT).show();
             exitBrowseMode();
             return;
         }
@@ -202,7 +202,7 @@ public class FavoriteActivity extends AppCompatActivity {
         viewPager.setCurrentItem(newPosition, false);
         updateBrowseInfo();
 
-        Toast.makeText(this, "已取消收藏", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.unfavorited), Toast.LENGTH_SHORT).show();
     }
 
     private void resetViewState(View view) {

@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.net.Uri;
 
@@ -55,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
         cardFavorites.setOnClickListener(v -> {
             List<Uri> favorites = getFavorites(this);
             if (favorites.isEmpty()) {
+                Toast.makeText(this, getString(R.string.no_favorites_yet), Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(HomeActivity.this, FavoriteActivity.class);
@@ -79,11 +83,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     static void saveFavorites(android.content.Context context, List<Uri> favorites) {
+        Set<Uri> uniqueSet = new LinkedHashSet<>(favorites);
+        List<Uri> deduped = new ArrayList<>(uniqueSet);
+
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(KEY_FAVORITES + "_size", favorites.size());
-        for (int i = 0; i < favorites.size(); i++) {
-            editor.putString(KEY_FAVORITES + "_" + i, favorites.get(i).toString());
+        editor.putInt(KEY_FAVORITES + "_size", deduped.size());
+        for (int i = 0; i < deduped.size(); i++) {
+            editor.putString(KEY_FAVORITES + "_" + i, deduped.get(i).toString());
         }
         editor.apply();
     }

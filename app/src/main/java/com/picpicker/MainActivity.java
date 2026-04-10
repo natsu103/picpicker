@@ -11,11 +11,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -124,21 +124,20 @@ public class MainActivity extends AppCompatActivity {
     private List<Uri> getPhotoUris() {
         List<Uri> uris = new ArrayList<>();
         String[] projection = {MediaStore.Images.Media._ID};
-        Cursor cursor = getContentResolver().query(
+        try (Cursor cursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
                 null,
                 null,
                 null
-        );
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-                Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                uris.add(uri);
+        )) {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+                    Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+                    uris.add(uri);
+                }
             }
-            cursor.close();
         }
         return uris;
     }
@@ -254,13 +253,13 @@ public class MainActivity extends AppCompatActivity {
                         resetViewState(currentView);
                         adapter.notifyDataSetChanged();
                         handleAfterRemove(currentPosition);
-                        Toast.makeText(this, "已标记为待删除", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.marked_for_delete), Toast.LENGTH_SHORT).show();
                     })
                     .start();
         } else {
             adapter.notifyDataSetChanged();
             handleAfterRemove(currentPosition);
-            Toast.makeText(this, "已标记为待删除", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.marked_for_delete), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -284,13 +283,13 @@ public class MainActivity extends AppCompatActivity {
                         resetViewState(currentView);
                         adapter.notifyDataSetChanged();
                         handleAfterRemove(currentPosition);
-                        Toast.makeText(this, "已添加到收藏夹", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
                     })
                     .start();
         } else {
             adapter.notifyDataSetChanged();
             handleAfterRemove(currentPosition);
-            Toast.makeText(this, "已添加到收藏夹", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -311,7 +310,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleAfterRemove(int removedPosition) {
         if (photoUris.isEmpty()) {
-            finishBrowse();
+            if (MODE_BATCH.equals(browseMode)) {
+                showBatchCompleteDialog();
+            } else {
+                finishBrowse();
+            }
             return;
         }
 
@@ -322,6 +325,32 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setCurrentItem(newPosition, false);
         updatePhotoInfo();
+    }
+
+    private void showBatchCompleteDialog() {
+        saveFavorites();
+        if (!deleteList.isEmpty()) {
+            Intent intent = new Intent(MainActivity.this, DeleteConfirmActivity.class);
+            intent.putExtra("deleteList", new ArrayList<>(deleteList));
+            intent.putExtra("batch_mode", true);
+            startActivityForResult(intent, REQUEST_DELETE_CONFIRM);
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.batch_complete_title)
+                    .setPositiveButton(R.string.batch_next_group, (dialog, which) -> reloadBatch())
+                    .setNegativeButton(R.string.batch_finish, (dialog, which) -> {
+                        setResult(RESULT_OK);
+                        finish();
+                    })
+                    .setCancelable(false)
+                    .show();
+        }
+    }
+
+    private void reloadBatch() {
+        favoriteList.clear();
+        deleteList.clear();
+        loadPhotos();
     }
 
     private void finishBrowse() {
@@ -357,8 +386,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_DELETE_CONFIRM) {
-            setResult(RESULT_OK);
-            finish();
+            if (MODE_BATCH.equals(browseMode)) {
+                deleteList.clear();
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.batch_complete_title)
+                        .setPositiveButton(R.string.batch_next_group, (dialog, which) -> reloadBatch())
+                        .setNegativeButton(R.string.batch_finish, (dialog, which) -> {
+                            setResult(RESULT_OK);
+                            finish();
+                        })
+                        .setCancelable(false)
+                        .show();
+            } else {
+                setResult(RESULT_OK);
+                finish();
+            }
         }
     }
 
