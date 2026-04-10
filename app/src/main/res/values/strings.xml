@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">PicPicker</string>
+    <string name="btn_done">完成</string>
+    <string name="btn_confirm_delete">确认删除</string>
+    <string name="btn_cancel_all">撤销全部</string>
+    <string name="no_photos">暂无照片</string>
+    <string name="delete_confirm_title">确认删除</string>
+    <string name="delete_confirm_message">确定要删除选中的照片吗？</string>
+    <string name="create_folder">新建收藏夹</string>
+    <string name="enter_folder_name">请输入收藏夹名称</string>
+    <string name="error_permission">请开启存储权限</string>
+    <string name="error_no_photos">没有找到照片</string>
+    <string name="home_subtitle">随机浏览，快速整理你的相册</string>
+    <string name="start_browse">开始浏览</string>
+    <string name="start_browse_desc">上滑删除 · 下滑收藏 · 左右切换</string>
+    <string name="view_favorites">我的收藏</string>
+    <string name="no_favorites_yet">还没有收藏的照片</string>
+    <string name="favorite_count">已收藏 %d 张照片</string>
+    <string name="review_delete_title">审视待删除的照片（%d 张）</string>
+    <string name="deleted_count">已删除 %d 张照片</string>
+    <string name="favorites_title">收藏夹（%d 张）</string>
+    <string name="btn_back_home">返回主页</string>
+</resources>
