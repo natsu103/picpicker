@@ -13,11 +13,13 @@
     <string name="home_subtitle">打乱时间线，每一次滑动都是惊喜</string>
     <string name="start_browse">开始浏览</string>
     <string name="start_browse_desc">上滑删除 · 下滑收藏 · 左右切换</string>
+    <string name="start_batch_browse">一组浏览</string>
+    <string name="start_batch_browse_desc">随机抽取20张为一组,轻快便捷</string>
     <string name="view_favorites">我的收藏</string>
     <string name="no_favorites_yet">还没有收藏的照片</string>
     <string name="favorite_count">已收藏 %d 张照片</string>
-    <string name="review_delete_title">确认要删除的照片（%d 张）</string>
+    <string name="review_delete_title">确认要删除的照片(%d 张)</string>
     <string name="deleted_count">已删除 %d 张照片</string>
-    <string name="favorites_title">收藏夹（%d 张）</string>
+    <string name="favorites_title">收藏夹(%d 张)</string>
     <string name="btn_back_home">返回主页</string>
 </resources>

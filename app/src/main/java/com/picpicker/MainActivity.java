@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSION = 1001;
     private static final int REQUEST_DELETE_CONFIRM = 1;
+    private static final String MODE_ALL = "all";
+    private static final String MODE_BATCH = "batch";
+    private static final int BATCH_SIZE = 20;
 
     private ViewPager2 viewPager;
     private SwipeInterceptorLayout swipeLayout;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Uri> favoriteList;
     private TextView tvPhotoInfo;
     private Button btnDone;
+    private String browseMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         deleteList = new ArrayList<>();
         favoriteList = new ArrayList<>();
+
+        browseMode = getIntent().getStringExtra("browse_mode");
+        if (browseMode == null) {
+            browseMode = MODE_ALL;
+        }
 
         if (checkPermission()) {
             loadPhotos();
@@ -100,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Collections.shuffle(photoUris);
+
+        if (MODE_BATCH.equals(browseMode) && photoUris.size() > BATCH_SIZE) {
+            photoUris = new ArrayList<>(photoUris.subList(0, BATCH_SIZE));
+        }
 
         adapter = new PhotoAdapter(this, photoUris);
         viewPager.setAdapter(adapter);

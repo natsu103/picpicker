@@ -22,6 +22,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String KEY_FAVORITES = "favorites";
 
     private MaterialCardView cardStartBrowse;
+    private MaterialCardView cardBatchBrowse;
     private MaterialCardView cardFavorites;
     private TextView tvFavoriteCount;
 
@@ -33,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(android.graphics.Color.BLACK);
 
         cardStartBrowse = findViewById(R.id.card_start_browse);
+        cardBatchBrowse = findViewById(R.id.card_batch_browse);
         cardFavorites = findViewById(R.id.card_favorites);
         tvFavoriteCount = findViewById(R.id.tv_favorite_count);
 
@@ -40,6 +42,13 @@ public class HomeActivity extends AppCompatActivity {
 
         cardStartBrowse.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            intent.putExtra("browse_mode", "all");
+            startActivityForResult(intent, REQUEST_BROWSE);
+        });
+
+        cardBatchBrowse.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            intent.putExtra("browse_mode", "batch");
             startActivityForResult(intent, REQUEST_BROWSE);
         });
 
