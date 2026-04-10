@@ -58,9 +58,10 @@ public class DeleteConfirmActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener((parent, view, position, id) -> {
+            boolean newState = !selectedList.get(position);
+            selectedList.set(position, newState);
             CheckBox checkBox = view.findViewById(R.id.cb_select);
-            checkBox.setChecked(!checkBox.isChecked());
-            selectedList.set(position, checkBox.isChecked());
+            checkBox.setChecked(newState);
         });
 
         btnCancelAll.setOnClickListener(v -> {
