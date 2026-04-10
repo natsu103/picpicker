@@ -1,18 +1,31 @@
 package com.picpicker;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
 
@@ -49,6 +62,67 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
         Uri uri = photoUris.get(position);
         Glide.with(context).load(uri).into(holder.imageView);
+
+        holder.imageView.setOnLongClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                showPhotoInfoDialog(photoUris.get(pos));
+            }
+            return true;
+        });
+    }
+
+    private void showPhotoInfoDialog(Uri uri) {
+        String dateStr = null;
+        String timeStr = null;
+
+        String[] projection = {MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATE_MODIFIED};
+        try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                long dateTaken = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN));
+                long dateModified = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED));
+
+                long timestamp = dateTaken > 0 ? dateTaken : (dateModified > 0 ? dateModified * 1000 : 0);
+
+                if (timestamp > 0) {
+                    LocalDateTime dateTime = Instant.ofEpochMilli(timestamp)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime();
+                    dateStr = dateTime.format(DateTimeFormatter.ofPattern("yyyy年M月d日", Locale.CHINA));
+                    timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss", Locale.CHINA));
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+
+        if (dateStr == null) {
+            dateStr = context.getString(R.string.photo_info_unknown);
+            timeStr = "";
+        }
+
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_photo_info, null);
+        TextView tvDate = dialogView.findViewById(R.id.tv_photo_date);
+        TextView tvTime = dialogView.findViewById(R.id.tv_photo_time);
+        tvDate.setText(dateStr);
+        if (timeStr.isEmpty()) {
+            tvTime.setVisibility(View.GONE);
+        } else {
+            tvTime.setText(timeStr);
+        }
+
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.setCancelable(true);
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
+        dialogView.findViewById(R.id.card_info).setOnClickListener(v -> {});
+
+        dialog.show();
     }
 
     @Override

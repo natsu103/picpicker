@@ -29,4 +29,6 @@
     <string name="added_to_favorites">已添加到收藏夹</string>
     <string name="unfavorited">已取消收藏</string>
     <string name="unfavorited_empty">已取消收藏，收藏夹为空</string>
+    <string name="photo_taken_time">拍摄时间</string>
+    <string name="photo_info_unknown">未知</string>
 </resources>
