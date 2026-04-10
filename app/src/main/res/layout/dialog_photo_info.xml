@@ -11,10 +11,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:padding="32dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="20dp"
         android:background="@drawable/bg_photo_info_card"
         android:gravity="center"
-        android:minWidth="260dp">
+        android:minWidth="280dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="22sp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/tv_photo_time"
@@ -37,7 +40,39 @@
             android:layout_height="wrap_content"
             android:textColor="#B0B0B0"
             android:textSize="18sp"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="2dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#33FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/photo_taken_location"
+            android:textColor="#80FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_photo_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"
+            android:gravity="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_open_in_gallery"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/btn_open_in_gallery"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

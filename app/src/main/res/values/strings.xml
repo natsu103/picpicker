@@ -30,5 +30,7 @@
     <string name="unfavorited">已取消收藏</string>
     <string name="unfavorited_empty">已取消收藏，收藏夹为空</string>
     <string name="photo_taken_time">拍摄时间</string>
+    <string name="photo_taken_location">拍摄位置</string>
     <string name="photo_info_unknown">未知</string>
+    <string name="btn_open_in_gallery">在相册中查看</string>
 </resources>
