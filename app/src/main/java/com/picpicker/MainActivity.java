@@ -1,16 +1,24 @@
 package com.picpicker;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnDone.setOnClickListener(v -> finishBrowse());
+
+        ImageButton btnHelp = findViewById(R.id.btn_help);
+        btnHelp.setOnClickListener(v -> showGestureTutorial());
     }
 
     private boolean checkPermission() {
@@ -298,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         view.setAlpha(1f);
         View overlayDelete = view.findViewById(R.id.overlay_delete);
         View overlayFavorite = view.findViewById(R.id.overlay_favorite);
+        View overlayUnfavorite = view.findViewById(R.id.overlay_unfavorite);
         if (overlayDelete != null) {
             overlayDelete.setVisibility(View.GONE);
             overlayDelete.setAlpha(0f);
@@ -305,6 +317,10 @@ public class MainActivity extends AppCompatActivity {
         if (overlayFavorite != null) {
             overlayFavorite.setVisibility(View.GONE);
             overlayFavorite.setAlpha(0f);
+        }
+        if (overlayUnfavorite != null) {
+            overlayUnfavorite.setVisibility(View.GONE);
+            overlayUnfavorite.setAlpha(0f);
         }
     }
 
@@ -402,6 +418,23 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    private void showGestureTutorial() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_gesture_tutorial, null);
+
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.setCancelable(true);
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
+        dialogView.findViewById(R.id.card_tutorial).setOnClickListener(v -> {});
+
+        dialog.show();
     }
 
     @Override

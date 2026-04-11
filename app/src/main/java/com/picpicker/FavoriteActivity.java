@@ -1,10 +1,18 @@
 package com.picpicker;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,6 +70,9 @@ public class FavoriteActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(v -> finish());
+
+        ImageButton btnHelp = findViewById(R.id.btn_help);
+        btnHelp.setOnClickListener(v -> showGestureTutorial());
 
         swipeLayout.setOnSwipeListener(new SwipeInterceptorLayout.OnSwipeListener() {
             @Override
@@ -123,15 +134,15 @@ public class FavoriteActivity extends AppCompatActivity {
 
         currentView.setTranslationY(deltaY);
 
-        View overlayFavorite = currentView.findViewById(R.id.overlay_favorite);
+        View overlayUnfavorite = currentView.findViewById(R.id.overlay_unfavorite);
 
         float progress = Math.min(1f, Math.abs(deltaY) / SwipeInterceptorLayout.COMMIT_THRESHOLD);
 
         if (deltaY > 0) {
-            overlayFavorite.setVisibility(View.VISIBLE);
-            overlayFavorite.setAlpha(progress * 0.7f);
+            overlayUnfavorite.setVisibility(View.VISIBLE);
+            overlayUnfavorite.setAlpha(progress * 0.7f);
         } else {
-            overlayFavorite.setVisibility(View.GONE);
+            overlayUnfavorite.setVisibility(View.GONE);
         }
     }
 
@@ -139,18 +150,18 @@ public class FavoriteActivity extends AppCompatActivity {
         View currentView = getCurrentView();
         if (currentView == null) return;
 
-        View overlayFavorite = currentView.findViewById(R.id.overlay_favorite);
+        View overlayUnfavorite = currentView.findViewById(R.id.overlay_unfavorite);
 
         currentView.animate()
                 .translationY(0f)
                 .setDuration(200)
                 .start();
 
-        if (overlayFavorite.getVisibility() == View.VISIBLE) {
-            overlayFavorite.animate()
+        if (overlayUnfavorite.getVisibility() == View.VISIBLE) {
+            overlayUnfavorite.animate()
                     .alpha(0f)
                     .setDuration(200)
-                    .withEndAction(() -> overlayFavorite.setVisibility(View.GONE))
+                    .withEndAction(() -> overlayUnfavorite.setVisibility(View.GONE))
                     .start();
         }
     }
@@ -210,6 +221,7 @@ public class FavoriteActivity extends AppCompatActivity {
         view.setAlpha(1f);
         View overlayDelete = view.findViewById(R.id.overlay_delete);
         View overlayFavorite = view.findViewById(R.id.overlay_favorite);
+        View overlayUnfavorite = view.findViewById(R.id.overlay_unfavorite);
         if (overlayDelete != null) {
             overlayDelete.setVisibility(View.GONE);
             overlayDelete.setAlpha(0f);
@@ -217,6 +229,10 @@ public class FavoriteActivity extends AppCompatActivity {
         if (overlayFavorite != null) {
             overlayFavorite.setVisibility(View.GONE);
             overlayFavorite.setAlpha(0f);
+        }
+        if (overlayUnfavorite != null) {
+            overlayUnfavorite.setVisibility(View.GONE);
+            overlayUnfavorite.setAlpha(0f);
         }
     }
 
@@ -239,6 +255,23 @@ public class FavoriteActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    private void showGestureTutorial() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_gesture_tutorial_fav, null);
+
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.setCancelable(true);
+
+        dialogView.setOnClickListener(v -> dialog.dismiss());
+        dialogView.findViewById(R.id.card_tutorial).setOnClickListener(v -> {});
+
+        dialog.show();
     }
 
     @Override

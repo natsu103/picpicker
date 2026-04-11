@@ -75,6 +75,19 @@
             android:shadowDy="1"
             android:shadowRadius="2" />
 
+        <ImageButton
+            android:id="@+id/btn_help"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_help_button"
+            android:src="@drawable/ic_help"
+            android:contentDescription="@string/gesture_tutorial_title"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
     </RelativeLayout>
 
 </RelativeLayout>

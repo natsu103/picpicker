@@ -57,6 +57,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
         View overlayDelete = holder.itemView.findViewById(R.id.overlay_delete);
         View overlayFavorite = holder.itemView.findViewById(R.id.overlay_favorite);
+        View overlayUnfavorite = holder.itemView.findViewById(R.id.overlay_unfavorite);
         if (overlayDelete != null) {
             overlayDelete.setVisibility(View.GONE);
             overlayDelete.setAlpha(0f);
@@ -64,6 +65,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         if (overlayFavorite != null) {
             overlayFavorite.setVisibility(View.GONE);
             overlayFavorite.setAlpha(0f);
+        }
+        if (overlayUnfavorite != null) {
+            overlayUnfavorite.setVisibility(View.GONE);
+            overlayUnfavorite.setAlpha(0f);
         }
 
         Uri uri = photoUris.get(position);

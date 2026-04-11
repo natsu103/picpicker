@@ -42,4 +42,20 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/overlay_unfavorite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red_500"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_heart_off"
+            android:importantForAccessibility="no" />
+
+    </FrameLayout>
+
 </FrameLayout>

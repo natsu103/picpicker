@@ -33,4 +33,15 @@
     <string name="photo_taken_location">拍摄位置</string>
     <string name="photo_info_unknown">未知</string>
     <string name="btn_open_in_gallery">在相册中查看</string>
+    <string name="gesture_tutorial_title">手势操作指南</string>
+    <string name="gesture_swipe_up">上滑</string>
+    <string name="gesture_swipe_up_desc">标记为待删除，浏览结束后统一确认</string>
+    <string name="gesture_swipe_down">下滑</string>
+    <string name="gesture_swipe_down_desc">收藏该照片，自动跳到下一张</string>
+    <string name="gesture_swipe_left_right">左右滑动</string>
+    <string name="gesture_swipe_left_right_desc">切换浏览上一张 / 下一张照片</string>
+    <string name="gesture_long_press">长按</string>
+    <string name="gesture_long_press_desc">查看照片的拍摄时间、位置等详细信息</string>
+    <string name="gesture_tutorial_hint">点击空白处关闭</string>
+    <string name="gesture_swipe_down_unfav_desc">取消收藏该照片，从收藏夹中移除</string>
 </resources>
